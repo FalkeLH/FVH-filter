@@ -1,5 +1,6 @@
 let img;
-let pixelSize = 3; // SKal holdes lav for high resolution billeder af hensyn til fart
+let pixelSize = 3; // Skal holdes lav for high resolution billeder af hensyn til fart
+let blurRange = 5;
 
 function preload() {
     img = loadImage("billeder/de_smukke.jpg");
@@ -24,16 +25,16 @@ function myFilter() {
     for (let i = 0; i < w; i += pixelSize) {
         for (let j = 0; j < h; j+= pixelSize) {
             let averageColor = [0, 0, 0];
-            for (let _i = i - pixelSize; _i <= i + pixelSize; _i += pixelSize) {
-                for (let _j = j - pixelSize; _j <= j + pixelSize; _j += pixelSize) {
+            for (let _i = i - pixelSize*blurRange; _i <= i + pixelSize*blurRange; _i += pixelSize) {
+                for (let _j = j - pixelSize*blurRange; _j <= j + pixelSize*blurRange; _j += pixelSize) {
                     averageColor = [averageColor[0] += getPixelValue(0, _i, _j),
                                     averageColor[1] += getPixelValue(1, _i, _j), 
                                     averageColor[2] += getPixelValue(2, _i, _j)];
                 }
             }
-            averageColor = [averageColor[0]/9,
-                            averageColor[1]/9,
-                            averageColor[2]/9];
+            averageColor = [averageColor[0]/(4*blurRange*blurRange+4*blurRange+1),
+                            averageColor[1]/(4*blurRange*blurRange+4*blurRange+1),
+                            averageColor[2]/(4*blurRange*blurRange+4*blurRange+1)];
             fill(averageColor);
             rect(i, j, pixelSize);
         }
