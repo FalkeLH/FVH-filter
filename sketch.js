@@ -1,6 +1,6 @@
 let img;
-let pixelSize = 3; // Skal holdes lav for high resolution billeder af hensyn til fart
-let blurRange = 5;
+let pixelSize = 10; // Skal holdes lav for high resolution billeder af hensyn til fart
+let blurRange = 1;
 
 function preload() {
     img = loadImage("billeder/de_smukke.jpg");
@@ -21,7 +21,6 @@ function draw() {
 }
 
 function myFilter() {
-    console.log("Hallo")
     for (let i = 0; i < w; i += pixelSize) {
         for (let j = 0; j < h; j+= pixelSize) {
             let averageColor = [0, 0, 0];
@@ -44,4 +43,14 @@ function myFilter() {
 function getPixelValue(n,i,j){
     p = img.pixels[(i+w*j)*4+n];
     return p;
+}
+
+function mousePressed() {
+    blurRange+=2;
+    myFilter();
+}
+
+function doubleClicked() {
+    blurRange=1;
+    myFilter();
 }
