@@ -1,6 +1,6 @@
 let img;
-let pixelSize = 10; // Skal holdes lav for high resolution billeder af hensyn til fart
-let blurRange = 1;
+let pixelSize = 4; // Skal holdes lav for high resolution billeder af hensyn til fart
+let blurRange = 0;
 
 function preload() {
     img = loadImage("billeder/de_smukke.jpg");
@@ -23,12 +23,14 @@ function draw() {
 function myFilter() {
     for (let i = 0; i < w; i += pixelSize) {
         for (let j = 0; j < h; j+= pixelSize) {
+            
+
             let averageColor = [0, 0, 0];
             for (let _i = i - pixelSize*blurRange; _i <= i + pixelSize*blurRange; _i += pixelSize) {
                 for (let _j = j - pixelSize*blurRange; _j <= j + pixelSize*blurRange; _j += pixelSize) {
-                    averageColor = [averageColor[0] += getPixelValue(0, _i, _j),
-                                    averageColor[1] += getPixelValue(1, _i, _j), 
-                                    averageColor[2] += getPixelValue(2, _i, _j)];
+                    averageColor = [averageColor[0] + getPixelValue(0, _i, _j),
+                                    averageColor[1] + getPixelValue(1, _i, _j), 
+                                    averageColor[2] + getPixelValue(2, _i, _j)];
                 }
             }
             averageColor = [averageColor[0]/(4*blurRange*blurRange+4*blurRange+1),
@@ -36,6 +38,8 @@ function myFilter() {
                             averageColor[2]/(4*blurRange*blurRange+4*blurRange+1)];
             fill(averageColor);
             rect(i, j, pixelSize);
+
+
         }
     }
 }
@@ -46,11 +50,16 @@ function getPixelValue(n,i,j){
 }
 
 function mousePressed() {
-    blurRange+=2;
+    blurRange++;
     myFilter();
 }
 
 function doubleClicked() {
-    blurRange=1;
+    blurRange=0;
+    myFilter();
+}
+
+function keyPressed() {
+    pixelSize++;
     myFilter();
 }
